@@ -3,6 +3,14 @@
   "version": "1.0.1",
   "description": "Automatically downloads all assets from a Figma file",
   "type": "module",
+  "homepage": "https://github.com/wannesdebacker/figma-asset-download",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wannesdebacker/figma-asset-download.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wannesdebacker/figma-asset-download/issues"
+  },
   "main": "index.mjs",
   "bin": {
     "fiado": "./src/index.mjs"
@@ -12,7 +20,15 @@
     "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "figma",
+    "figma downloader",
+    "figma assets",
+    "figma asset downloader",
+    "figma automation",
+    "design assets",
+    "download figma assets"
+  ],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@9.12.3+sha512.cce0f9de9c5a7c95bef944169cc5dfe8741abfb145078c0d508b868056848a87c81e626246cb60967cbd7fd29a6c062ef73ff840d96b3c86c40ac92cf4a813ee",
