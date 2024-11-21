@@ -19,14 +19,13 @@ export const getUserConfig = async (args) => {
   try {
     const {
       accessToken: argAccessToken,
-      frameId: argFrameId,
+      fileId: argFileId,
       directory,
-      type,
-      extension,
+      fileType,
     } = args;
 
     const envAccessToken = process.env.FIGMA_ASSET_TOKEN || null;
-    const envFrameId = process.env.FIGMA_FRAME_ID || null;
+    const envFileId = process.env.FIGMA_FILE_ID || null;
 
     const questions = [];
 
@@ -38,10 +37,10 @@ export const getUserConfig = async (args) => {
       });
     }
 
-    if (!argFrameId && !envFrameId) {
+    if (!argFileId && !envFileId) {
       questions.push({
         type: "input",
-        name: "frameId",
+        name: "fileId",
         message: "What's the ID of the Figma file?",
       });
     }
@@ -64,10 +63,9 @@ export const getUserConfig = async (args) => {
 
     return {
       accessToken: argAccessToken || envAccessToken || answers.accessToken,
-      frameId: argFrameId || envFrameId || answers.frameId,
+      fileId: argFileId || envFileId || answers.fileId,
       directory: directory || answers.directory,
-      type,
-      extension,
+      fileType,
     };
   } catch (err) {
     if (err instanceof Error) {

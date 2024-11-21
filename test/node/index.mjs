@@ -4,7 +4,7 @@ import init from "../../src/init.mjs";
   try {
     await init({
       accessToken: "add this for testing",
-      frameId: "add this for testing",
+      fileId: "add this for testing",
       directory: "./dist",
       dryRun: false,
     });

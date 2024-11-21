@@ -27,19 +27,18 @@ This will make the `fiado` command globally available.
 To download assets from a Figma file:
 
 ```bash
-fiado --accessToken YOUR_ACCESS_TOKEN --frameId YOUR_FRAME_ID --directory ./assets
+fiado --accessToken YOUR_ACCESS_TOKEN --fileId YOUR_FILE_ID --directory ./assets
 ```
 
 ### Options
 
-| Option          | Description                                                               | Default     |
-| --------------- | ------------------------------------------------------------------------- | ----------- |
-| `--accessToken` | Your Figma access token.                                                  | Required    |
-| `--frameId`     | The ID of the Figma file or frame to download.                            | Required    |
-| `--directory`   | Directory to save the downloaded assets.                                  | `./dist`    |
-| `--dry-run`     | Generates a `config.json` with a list of assets without downloading them. | `false`     |
-| `--type`        | Type of Figma assets to download (e.g., `COMPONENT`, `FRAME`, `CANVAS`).  | `COMPONENT` |
-| `--extension`   | File extension for the assets (`svg` or `png`).                           | `svg`       |
+| Option          | Description                                                               | Default  |
+| --------------- | ------------------------------------------------------------------------- | -------- |
+| `--accessToken` | Your Figma access token.                                                  | Required |
+| `--fileId`      | The ID of the Figma file to download.                                     | Required |
+| `--directory`   | Directory to save the downloaded assets.                                  | `./dist` |
+| `--dryRun`      | Generates a `config.json` with a list of assets without downloading them. | `false`  |
+| `--fileType`    | File extension for the assets (`svg` or `png`).                           | `svg`    |
 
 ### Using It Programmatically
 
@@ -52,7 +51,7 @@ import init from "fiado";
   try {
     await init({
       accessToken: "your-figma-access-token",
-      frameId: "your-figma-frame-id",
+      fileId: "your-figma-file-id",
       directory: "./dist",
       dryRun: false,
     });
@@ -70,10 +69,10 @@ To avoid passing sensitive information as command-line arguments, you can use a 
 
 ```env
 FIGMA_ASSET_TOKEN=your-figma-access-token
-FIGMA_FRAME_ID=your-figma-frame-id
+FIGMA_FILE_ID=your-figma-file-id
 ```
 
-Fiado will use these values if no command-line arguments are provided for `accessToken` and `frameId`. Command-line arguments always take precedence over `.env` values.
+Fiado will use these values if no command-line arguments are provided for `accessToken` and `fileId`. Command-line arguments always take precedence over `.env` values.
 
 ### Interactive Prompts
 
@@ -81,7 +80,7 @@ If any required option is missing from both arguments and the `.env` file, Fiado
 
 ## Features
 
-- Automatically downloads all assets from a specified Figma file or frame.
+- Automatically downloads all assets from a specified Figma file.
 - Supports configuration via command-line arguments, `.env` files, and interactive prompts.
 - Programmatic API for advanced use cases.
 - Customizable save directory for downloaded assets.
@@ -89,8 +88,7 @@ If any required option is missing from both arguments and the `.env` file, Fiado
 
 ## Notes
 
-- Ensure your Figma access token has the required permissions to access files and frames.
-- The `--type` option can accept additional asset types depending on your use case.
+- Ensure your Figma access token has the required permissions to access files.
 
 ## License
 

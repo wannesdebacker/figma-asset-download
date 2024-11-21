@@ -21,13 +21,13 @@ const argv = yargs(hideBin(process.argv))
     type: "string",
     description: "Directory to save the assets",
   })
-  .option("dry-run", {
+  .option("dryRun", {
     alias: "d",
     type: "boolean",
     default: false,
     description: "Run the script without downloading the assets",
   })
-  .option("batch-size", {
+  .option("batchSize", {
     alias: "b",
     type: "number",
     default: 8,
@@ -37,22 +37,16 @@ const argv = yargs(hideBin(process.argv))
     type: "string",
     description: "Figma access token",
   })
-  .option("frameId", {
+  .option("fileId", {
     alias: "f",
     type: "string",
     description: "Figma file ID",
   })
-  .option("type", {
-    alias: "t",
-    type: "string",
-    description: "Type of assets to extract",
-    default: FIGMA_TYPE_TO_EXTRACT,
-  })
-  .option("extension", {
+  .option("fileType", {
     alias: "e",
     type: "string",
     choices: ["svg", "png"],
-    description: "File extension for the assets",
+    description: "File type for the assets",
     default: "svg",
   })
   .alias("h", "help")
@@ -76,14 +70,14 @@ const init = async (config = {}) => {
     })
   );
 
-  if (!userConfig.accessToken || !userConfig.frameId) {
-    log("Please provide an access token and frame ID");
+  if (!userConfig.accessToken || !userConfig.fileId) {
+    log("Please provide an access token and file ID");
     return;
   }
 
   time("Figma Asset Download");
 
-  const { directory, extension } = userConfig;
+  const { directory, fileType } = userConfig;
 
   if (!directory) {
     throw new Error("Please provide a directory to save the assets");
@@ -106,7 +100,7 @@ const init = async (config = {}) => {
     return;
   }
 
-  await downloadAssets(assetConfig, resolvedDirectory, extension);
+  await downloadAssets(assetConfig, resolvedDirectory, fileType);
 
   timeEnd("Figma Asset Download");
 };

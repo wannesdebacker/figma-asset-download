@@ -1,18 +1,16 @@
 export interface UserInput {
   accessToken?: string;
-  frameId?: string;
+  fileId?: string;
   directory?: string;
-  type?: string;
-  extension?: "svg" | "png";
+  fileType?: "svg" | "png";
   dryRun?: boolean;
 }
 
 export interface Config {
   accessToken: string;
-  frameId: string;
+  fileId: string;
   directory: string;
-  type: string;
-  extension: string;
+  fileType: string;
   dryRun: boolean;
 }
 

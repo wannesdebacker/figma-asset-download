@@ -23,11 +23,11 @@ async function batchPromiseAll(tasks, batchSize = 8) {
  * @typedef {import('../types').AssetConfig} AssetConfig
  * @param {AssetConfig[]} config
  * @param {string} directory
- * @param {string} extension
+ * @param {string} fileType
  * @returns {Promise<void>}
  * @throws {Error}
  */
-export const downloadAssets = async (config, directory, extension) => {
+export const downloadAssets = async (config, directory, fileType) => {
   const spinner = ora("Downloading assets from Figma").start();
 
   try {
@@ -43,7 +43,7 @@ export const downloadAssets = async (config, directory, extension) => {
       const response = await fetch(downloadLink);
       const buffer = Buffer.from(await response.arrayBuffer());
 
-      const filePath = path.join(directoryPath, `${name}.${extension}`);
+      const filePath = path.join(directoryPath, `${name}.${fileType}`);
 
       await fs.writeFile(filePath, buffer);
     });

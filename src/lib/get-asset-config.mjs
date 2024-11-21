@@ -10,17 +10,16 @@ import { figmaApi } from "./api.mjs";
 
 /**
  * @param {FigmaNode} node
- * @param {string} type
  * @param {AssetConfig[]} components
  * @returns {AssetConfig[]}
  */
-const findComponents = (node, type, components = []) => {
-  if (node.type === type && node.name && node.id) {
+const findComponents = (node, components = []) => {
+  if (node.type === "COMPONENT" && node.name && node.id) {
     components.push({ name: node.name, id: node.id });
   }
 
   if (node.children) {
-    node.children.forEach((child) => findComponents(child, type, components));
+    node.children.forEach((child) => findComponents(child, components));
   }
 
   return components;
@@ -28,20 +27,19 @@ const findComponents = (node, type, components = []) => {
 
 /**
  * @param {{ children: FigmaNode[] }} document
- * @param {string} type
  * @returns {AssetConfig[]}
  * @throws {Error}
  */
-const getPageObject = (document, type) => {
+const getPageObject = (document) => {
   try {
     return document.children.reduce(
       /**
        * @param {AssetConfig[]} allComponents
-       * @param {FigmaNode} frame
+       * @param {FigmaNode} file
        * @returns {AssetConfig[]}
        */
-      (allComponents, frame) => {
-        return allComponents.concat(findComponents(frame, type, []));
+      (allComponents, file) => {
+        return allComponents.concat(findComponents(file, []));
       },
       []
     );
@@ -60,36 +58,36 @@ const getPageObject = (document, type) => {
  * @throws {Error}
  */
 export const getAssetConfig = async (userConfig) => {
-  const { accessToken, frameId, type, extension } = userConfig;
+  const { accessToken, fileId, fileType } = userConfig;
 
-  if (!accessToken || !frameId) {
-    throw new Error("Please provide an access token and frame ID");
+  if (!accessToken || !fileId) {
+    throw new Error("Please provide an access token and file ID");
   }
 
-  const rawData = await figmaApi(accessToken, `files/${frameId}`);
+  const rawData = await figmaApi(accessToken, `files/${fileId}`);
 
   if (!rawData.document) {
     throw new Error("Document not found");
   }
 
-  const data = getPageObject(rawData.document, type);
-  return await enrichData(data, accessToken, frameId, extension);
+  const data = getPageObject(rawData.document);
+  return await enrichData(data, accessToken, fileId, fileType);
 };
 
 /**
  * @param {AssetConfig[]} data
  * @param {string} accessToken
- * @param {string} frameId
- * @param {string} extension
+ * @param {string} fileId
+ * @param {string} fileType
  * @returns {Promise<AssetConfig[]>}
  * @throws {Error}
  */
-export const enrichData = async (data, accessToken, frameId, extension) => {
+export const enrichData = async (data, accessToken, fileId, fileType) => {
   try {
     const ids = data.map((item) => item.id).join(",");
     const response = await figmaApi(
       accessToken,
-      `images/${frameId}?ids=${ids}&format=${extension}`
+      `images/${fileId}?ids=${ids}&format=${fileType}`
     );
 
     return data.map((item) => ({
