@@ -1,6 +1,6 @@
 {
-  "name": "figma-asset-download",
-  "version": "1.0.0",
+  "name": "fiado",
+  "version": "0.1.0",
   "description": "Automatically downloads all assets from a Figma file",
   "type": "module",
   "main": "index.mjs",
