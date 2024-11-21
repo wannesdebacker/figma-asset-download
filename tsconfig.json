@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "allowJs": true,
+        "lib": ["ES2020"],
+        "baseUrl": "./src",
+        "moduleResolution": "node",
+        "declaration": false,
+        "noEmit": true,
+        "esModuleInterop": true,
+        "module": "ESNext",
+        "target": "ES2022",   
+    },
+    "include": ["src"],
+}
