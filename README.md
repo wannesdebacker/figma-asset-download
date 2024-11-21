@@ -90,6 +90,34 @@ If any required option is missing from both arguments and the `.env` file, Fiado
 
 - Ensure your Figma access token has the required permissions to access files.
 
+## What is an `accessToken` or `fileId`?
+
+To use Fiado and interact with Figma's API, you need to provide two key pieces of information: an `accessToken` and a `fileId`. Here's what they mean:
+
+### 1. `accessToken`
+
+An `accessToken` is a unique string that grants your tool access to your Figma account. It acts as a secure way to authenticate requests to Figma's API.
+
+#### How to Get an `accessToken`
+
+1. Go to your [Figma Account Settings](https://www.figma.com/settings).
+2. Go to the Security tab.
+3. Click **Generate new token**.
+4. Copy the generated token and provide it to Fiado as the `--accessToken` option or via your `.env` file.
+
+> **Note:** Keep your `accessToken` private. Anyone with access to your token can make requests on your behalf.
+
+### 2. `fileId`
+
+A `fileId` is the unique identifier for the Figma file you want to download assets from. It is part of the URL for your Figma file.
+
+#### How to Find the `fileId`
+
+1. Open the Figma file you want to work with.
+2. When you share the file or check its URL in the address bar, it will look something like this:
+
+`https://www.figma.com/design/{fileId}/{something else but not the fileId}`
+
 ## License
 
 This project is licensed under the ISC License.
