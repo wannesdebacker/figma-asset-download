@@ -20,26 +20,6 @@ async function batchPromiseAll(tasks, batchSize = 8) {
 }
 
 /**
- * @param {string | undefined} inputPath
- * @returns {string}
- * @throws {Error}
- */
-export const resolvePath = (inputPath) => {
-  if (!inputPath) {
-    throw new Error("Path is required but was not provided.");
-  }
-
-  if (inputPath.startsWith("~/")) {
-    return path.resolve(
-      process.env.HOME || process.env.USERPROFILE || "",
-      inputPath.slice(2)
-    );
-  }
-
-  return path.resolve(inputPath);
-};
-
-/**
  * @typedef {import('../types').AssetConfig} AssetConfig
  * @param {AssetConfig[]} config
  * @param {string} directory
@@ -51,7 +31,7 @@ export const downloadAssets = async (config, directory, extension) => {
   const spinner = ora("Downloading assets from Figma").start();
 
   try {
-    const directoryPath = resolvePath(directory);
+    const directoryPath = directory;
 
     await fs.mkdir(directoryPath, { recursive: true });
 
