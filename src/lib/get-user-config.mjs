@@ -1,11 +1,15 @@
 // @ts-check
 
 import Enquirer from "enquirer";
+import { config as loadEnv } from "dotenv";
+import path from "node:path";
 
 const { prompt } = Enquirer;
 
+loadEnv({ path: path.resolve(process.cwd(), ".env") });
+
 /** @typedef {import('../types').Argv} Argv */
-/** @typedef {import('../types').UserConfigArgs} UserConfigArgs */
+/** @typedef {import('../types').Argv} UserConfigArgs */
 
 /**
  * @param {Argv} args
@@ -13,11 +17,20 @@ const { prompt } = Enquirer;
  */
 export const getUserConfig = async (args) => {
   try {
-    const { accessToken, frameId, directory } = args;
+    const {
+      accessToken: argAccessToken,
+      frameId: argFrameId,
+      directory,
+      type,
+      extension,
+    } = args;
+
+    const envAccessToken = process.env.FIGMA_ASSET_TOKEN || null;
+    const envFrameId = process.env.FIGMA_FRAME_ID || null;
 
     const questions = [];
 
-    if (!accessToken) {
+    if (!argAccessToken && !envAccessToken) {
       questions.push({
         type: "input",
         name: "accessToken",
@@ -25,7 +38,7 @@ export const getUserConfig = async (args) => {
       });
     }
 
-    if (!frameId) {
+    if (!argFrameId && !envFrameId) {
       questions.push({
         type: "input",
         name: "frameId",
@@ -50,9 +63,11 @@ export const getUserConfig = async (args) => {
     }
 
     return {
-      accessToken: accessToken || answers.accessToken,
-      frameId: frameId || answers.frameId,
+      accessToken: argAccessToken || envAccessToken || answers.accessToken,
+      frameId: argFrameId || envFrameId || answers.frameId,
       directory: directory || answers.directory,
+      type,
+      extension,
     };
   } catch (err) {
     if (err instanceof Error) {

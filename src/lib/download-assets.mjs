@@ -43,10 +43,11 @@ export const resolvePath = (inputPath) => {
  * @typedef {import('../types').AssetConfig} AssetConfig
  * @param {AssetConfig[]} config
  * @param {string} directory
+ * @param {string} extension
  * @returns {Promise<void>}
  * @throws {Error}
  */
-export const downloadAssets = async (config, directory) => {
+export const downloadAssets = async (config, directory, extension) => {
   const spinner = ora("Downloading assets from Figma").start();
 
   try {
@@ -62,7 +63,7 @@ export const downloadAssets = async (config, directory) => {
       const response = await fetch(downloadLink);
       const buffer = Buffer.from(await response.arrayBuffer());
 
-      const filePath = path.join(directoryPath, `${name}.svg`);
+      const filePath = path.join(directoryPath, `${name}.${extension}`);
 
       await fs.writeFile(filePath, buffer);
     });

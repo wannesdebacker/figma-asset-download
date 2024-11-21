@@ -3,24 +3,24 @@
 import { figmaApi } from "./api.mjs";
 
 /**
- * @typedef {import('../types.js').AssetConfig} AssetConfig
- * @typedef {import('../types.js').UserConfigArgs} UserConfigArgs
- * @typedef {import('../types.js').FigmaNode} FigmaNode
+ * @typedef {import('../types.d').AssetConfig} AssetConfig
+ * @typedef {import('../types.d').FigmaNode} FigmaNode
+ * @typedef {import('../types.d').Config} UserConfig
  */
 
 /**
  * @param {FigmaNode} node
+ * @param {string} type
  * @param {AssetConfig[]} components
  * @returns {AssetConfig[]}
  */
-
-const findComponents = (node, components = []) => {
-  if (node.type === process.env.FIGMA_TYPE_TO_EXTRACT && node.name && node.id) {
+const findComponents = (node, type, components = []) => {
+  if (node.type === type && node.name && node.id) {
     components.push({ name: node.name, id: node.id });
   }
 
-  if (node.children && node.children.length > 0) {
-    node.children.forEach((child) => findComponents(child, components));
+  if (node.children) {
+    node.children.forEach((child) => findComponents(child, type, components));
   }
 
   return components;
@@ -28,103 +28,79 @@ const findComponents = (node, components = []) => {
 
 /**
  * @param {{ children: FigmaNode[] }} document
+ * @param {string} type
  * @returns {AssetConfig[]}
  * @throws {Error}
  */
-const getPageObject = (document) => {
+const getPageObject = (document, type) => {
   try {
     return document.children.reduce(
       /**
-       * @param {AssetConfig[]} allComponents - Accumulated components.
-       * @param {FigmaNode} frame - The current node being processed.
-       * @returns {AssetConfig[]} Updated array of components.
+       * @param {AssetConfig[]} allComponents
+       * @param {FigmaNode} frame
+       * @returns {AssetConfig[]}
        */
       (allComponents, frame) => {
-        const frameComponents = findComponents(frame);
-
-        return allComponents.concat(frameComponents);
+        return allComponents.concat(findComponents(frame, type, []));
       },
       []
     );
   } catch (err) {
-    if (err instanceof Error) {
-      throw new Error(
-        `Something went wrong while creating asset config: ${err.message}`
-      );
-    } else {
-      throw new Error("Something went wrong while creating asset config");
-    }
+    throw new Error(
+      `Something went wrong while creating asset config: ${
+        err instanceof Error ? err.message : "Unknown error"
+      }`
+    );
   }
 };
 
 /**
- * @typedef {Object} UserConfig
- * @property {string} accessToken
- * @property {string} frameId
- */
-
-/**
- * @param {UserConfigArgs} userConfig
+ * @param {UserConfig} userConfig
  * @returns {Promise<AssetConfig[]>}
  * @throws {Error}
  */
 export const getAssetConfig = async (userConfig) => {
-  try {
-    const { accessToken, frameId } = userConfig;
+  const { accessToken, frameId, type, extension } = userConfig;
 
-    if (!accessToken || !frameId) {
-      throw new Error("Please provide an access token and frame ID");
-    }
-
-    const rawData = await figmaApi(accessToken, `files/${frameId}`);
-
-    if (!rawData.document) {
-      throw new Error("Document not found");
-    }
-
-    const data = getPageObject(rawData.document);
-    const enrichedData = await enrichData(data);
-
-    return enrichedData;
-  } catch (err) {
-    if (err instanceof Error) {
-      throw new Error(
-        `Something went wrong while creating asset config: ${err.message}`
-      );
-    } else {
-      throw new Error("Something went wrong while creating asset config");
-    }
+  if (!accessToken || !frameId) {
+    throw new Error("Please provide an access token and frame ID");
   }
+
+  const rawData = await figmaApi(accessToken, `files/${frameId}`);
+
+  if (!rawData.document) {
+    throw new Error("Document not found");
+  }
+
+  const data = getPageObject(rawData.document, type);
+  return await enrichData(data, accessToken, frameId, extension);
 };
 
 /**
- * @param {AssetConfig[]} data - An array of component data.
- * @returns {Promise<AssetConfig[]>} A promise resolving to enriched components.
+ * @param {AssetConfig[]} data
+ * @param {string} accessToken
+ * @param {string} frameId
+ * @param {string} extension
+ * @returns {Promise<AssetConfig[]>}
+ * @throws {Error}
  */
-export const enrichData = async (data) => {
+export const enrichData = async (data, accessToken, frameId, extension) => {
   try {
-    const assetsIdsCommaSeperated = data.map((item) => item.id).join(",");
-
-    if (!process.env.FIGMA_ACCESS_TOKEN) {
-      throw new Error("Please provide a Figma access token");
-    }
-
-    const assetsDownloadUrl = await figmaApi(
-      process.env.FIGMA_ACCESS_TOKEN,
-      `images/${process.env.FIGMA_FRAME_ID}?ids=${assetsIdsCommaSeperated}&format=svg`
+    const ids = data.map((item) => item.id).join(",");
+    const response = await figmaApi(
+      accessToken,
+      `images/${frameId}?ids=${ids}&format=${extension}`
     );
 
     return data.map((item) => ({
       ...item,
-      downloadLink: assetsDownloadUrl.images[item.id],
+      downloadLink: response.images[item.id],
     }));
   } catch (err) {
-    if (err instanceof Error) {
-      throw new Error(
-        `Something went wrong while enriching data: ${err.message}`
-      );
-    } else {
-      throw new Error("Something went wrong while enriching data");
-    }
+    throw new Error(
+      `Something went wrong while enriching data: ${
+        err instanceof Error ? err.message : "Unknown error"
+      }`
+    );
   }
 };

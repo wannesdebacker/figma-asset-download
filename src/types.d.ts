@@ -1,25 +1,23 @@
-export interface Argv {
+export interface UserInput {
+  accessToken?: string;
+  frameId?: string;
   directory?: string;
+  type?: string;
+  extension?: "svg" | "png";
+  dryRun?: boolean;
+}
+
+export interface Config {
+  accessToken: string;
+  frameId: string;
+  directory: string;
+  type: string;
+  extension: string;
   dryRun: boolean;
-  batchSize: number;
-  accessToken?: string;
-  frameId?: string;
 }
 
-export interface UserConfigArgs {
-  accessToken?: string;
-  frameId?: string;
-  directory?: string;
-}
-
-export interface AssetConfig {
-  id: string;
-  name: string;
-  downloadLink?: string;
-}
-
-export interface DownloadAssets {
-  (config: AssetConfig[], directory: string): Promise<void>;
+export interface Argv extends Partial<Config> {
+  batchSize?: number;
 }
 
 export interface FigmaNode {
@@ -30,9 +28,24 @@ export interface FigmaNode {
 }
 
 export interface FigmaApiResponse {
+  document?: {
+    children: FigmaNode[];
+  };
   [key: string]: any;
 }
 
-export interface FigmaApi {
-  (accessToken: string, endpoint: string): Promise<FigmaApiResponse>;
+export interface AssetConfig {
+  id: string;
+  name: string;
+  downloadLink?: string;
 }
+
+export type FigmaApi = (
+  accessToken: string,
+  endpoint: string
+) => Promise<FigmaApiResponse>;
+
+export type DownloadAssets = (
+  config: AssetConfig[],
+  directory: string
+) => Promise<void>;
