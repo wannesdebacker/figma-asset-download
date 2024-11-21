@@ -1,11 +1,11 @@
 {
   "name": "fiado",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Automatically downloads all assets from a Figma file",
   "type": "module",
   "main": "index.mjs",
   "bin": {
-    "figma-asset-download": "./src/index.mjs"
+    "fiado": "./src/index.mjs"
   },
   "scripts": {
     "start": "node ./src/index.mjs",
