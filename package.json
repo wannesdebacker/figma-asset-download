@@ -1,6 +1,6 @@
 {
   "name": "fiado",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Automatically downloads all assets from a Figma file",
   "type": "module",
   "homepage": "https://github.com/wannesdebacker/figma-asset-download",

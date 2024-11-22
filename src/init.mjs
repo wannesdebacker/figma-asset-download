@@ -12,7 +12,6 @@ import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { FIGMA_TYPE_TO_EXTRACT } from "./lib/env.js";
 
 /** @type {import('./types.d').Argv} */
 const argv = yargs(hideBin(process.argv))

@@ -6,6 +6,19 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 
 /**
+ * @param {string} name
+ * @returns {string}
+ */
+const sanitizeFileName = (name) => {
+  return name
+    .trim()
+    .replace(/[#,=]/g, "")
+    .replace(/\s+/g, "_")
+    .replace(/[^a-zA-Z0-9_.-]/g, "")
+    .replace(/_{2,}/g, "_");
+};
+
+/**
  * @param {(() => Promise<any>)[]} tasks
  * @param {number} [batchSize]
  * @returns {Promise<any[]>}
@@ -40,10 +53,15 @@ export const downloadAssets = async (config, directory, fileType) => {
         throw new Error(`Download link is missing for ${name}`);
       }
 
+      const sanitizedFileName = sanitizeFileName(name);
+
       const response = await fetch(downloadLink);
       const buffer = Buffer.from(await response.arrayBuffer());
 
-      const filePath = path.join(directoryPath, `${name}.${fileType}`);
+      const filePath = path.join(
+        directoryPath,
+        `${sanitizedFileName}.${fileType}`
+      );
 
       await fs.writeFile(filePath, buffer);
     });
