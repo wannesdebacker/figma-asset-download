@@ -1,12 +1,16 @@
 name: Publish to NPM
 
 on:
-  workflow_dispatch: # Allow manual runs
+  workflow_dispatch: # Allow manual trigger
     inputs:
-      version_type: # Let the user choose the version type
-        description: "Version bump type: major, minor, or patch"
+      version_type: # Dropdown for version bump
+        description: "Select the version bump type"
         required: true
-        default: "patch"
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
 
 jobs:
   publish-npm:
@@ -21,13 +25,16 @@ jobs:
           node-version: 22
           registry-url: https://registry.npmjs.org/
 
+      - name: Install pnpm
+        run: npm install -g pnpm
+
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install
 
       - name: Bump version and commit
         id: bump-version
         run: |
-          npm version ${{ inputs.version_type }} --no-git-tag-version
+          pnpm version ${{ inputs.version_type }}
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git commit -am "Bump version to $(node -p "require('./package.json').version")"
@@ -35,6 +42,6 @@ jobs:
           git push origin HEAD --tags
 
       - name: Publish to npm
-        run: npm publish
+        run: pnpm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
