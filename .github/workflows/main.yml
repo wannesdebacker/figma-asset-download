@@ -1,9 +1,9 @@
 name: Publish to NPM
 
 on:
-  workflow_dispatch: # Allow manual trigger
+  workflow_dispatch:
     inputs:
-      version_type: # Dropdown for version bump
+      version_type:
         description: "Select the version bump type"
         required: true
         type: choice
@@ -28,6 +28,11 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
 
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Install dependencies
         run: pnpm install
 
@@ -35,10 +40,6 @@ jobs:
         id: bump-version
         run: |
           pnpm version ${{ inputs.version_type }}
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -am "Bump version to $(node -p "require('./package.json').version")"
-          git tag v$(node -p "require('./package.json').version")
           git push origin HEAD --tags
 
       - name: Publish to npm
