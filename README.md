@@ -1,5 +1,7 @@
 # Fiado (Figma Asset Downloader)
 
+[![npm version](https://badge.fury.io/js/fiado.svg)](https://www.npmjs.com/package/fiado)
+
 **Fiado** is a CLI tool to automatically download all assets from a Figma file. It provides flexibility through command-line options, `.env` file support, and programmatic usage.
 
 ## Installation
