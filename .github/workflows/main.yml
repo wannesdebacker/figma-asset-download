@@ -48,7 +48,7 @@ jobs:
           git push origin "$branch_name"
 
       - name: Create a Pull Request
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: release/v$(node -p "require('./package.json').version")
