@@ -1,4 +1,4 @@
-import init from "../../src/init.mjs";
+import init from "fiado";
 
 (async () => {
   try {
