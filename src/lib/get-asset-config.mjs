@@ -15,7 +15,7 @@ import ora from "ora";
  * @param {AssetConfig[]} components
  * @returns {AssetConfig[]}
  */
-const findComponents = (node, components = []) => {
+export const findComponents = (node, components = []) => {
   if (node.type === "COMPONENT" && node.name && node.id) {
     components.push({ name: node.name, id: node.id });
   }
@@ -32,7 +32,7 @@ const findComponents = (node, components = []) => {
  * @returns {AssetConfig[]}
  * @throws {Error}
  */
-const getPageObject = (document) => {
+export const getPageObject = (document) => {
   try {
     return document.children.reduce(
       /**
