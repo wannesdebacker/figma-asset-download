@@ -10,7 +10,7 @@ importers:
     dependencies:
       fiado:
         specifier: ^2.1.0
-        version: 2.1.0
+        version: 2.2.0
       node:
         specifier: 'link:'
         version: 'link:'
@@ -74,8 +74,8 @@ packages:
     resolution: {integrity: sha512-WUj2qlxaQtO4g6Pq5c29GTcWGDyd8itL8zTlipgECz3JesAiiOKotd8JU6otB3PACgG6xkJUyVhboMS+bje/jA==}
     engines: {node: '>=6'}
 
-  fiado@2.1.0:
-    resolution: {integrity: sha512-EO0c4L/RupCgpcjvhvRoK0O0rOUI7GqFFNG8m3y76MG4FHcH9g1mOH+YcvoIvF0FD24vqLiA6Wa/WXPzM/bIKw==}
+  fiado@2.2.0:
+    resolution: {integrity: sha512-WAx5kfuLEp7KZB66QjZdUuuHaBSq+QSCadp539Mv8hj8SWQ46wEN2P1uJU3bFrJJMxyGikD3VUT9lDbUIuEpxA==}
     hasBin: true
 
   get-caller-file@2.0.5:
@@ -211,7 +211,7 @@ snapshots:
 
   escalade@3.2.0: {}
 
-  fiado@2.1.0:
+  fiado@2.2.0:
     dependencies:
       chalk: 5.3.0
       dotenv: 16.4.5
