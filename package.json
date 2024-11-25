@@ -11,7 +11,7 @@
   "bugs": {
     "url": "https://github.com/wannesdebacker/figma-asset-download/issues"
   },
-  "main": ",.src/index.mjs",
+  "main": "./src/index.mjs",
   "bin": {
     "fiado": "./src/index.mjs"
   },
