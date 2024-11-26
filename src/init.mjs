@@ -48,6 +48,17 @@ const argv = yargs(hideBin(process.argv))
     description: "File type for the assets",
     default: "svg",
   })
+  .option("customLogo", {
+    alias: "l",
+    type: "string",
+    description: "Custom logo to display",
+  })
+  .option("hideLogo", {
+    alias: "hl",
+    type: "boolean",
+    default: false,
+    description: "Hide the logo",
+  })
   .alias("h", "help")
   .help()
   .parseSync();
@@ -58,8 +69,12 @@ const argv = yargs(hideBin(process.argv))
  */
 const init = async (config = {}) => {
   const dryRun = config.dryRun ?? argv.dryRun;
+  const customLogo = config.customLogo ?? argv.customLogo;
+  const hideLogo = config.hideLogo ?? argv.hideLogo;
 
-  log(logo);
+  if (!hideLogo) {
+    log(customLogo ?? logo);
+  }
 
   const userConfig = /** @type {import('./types.d').Config} */ (
     await getUserConfig({

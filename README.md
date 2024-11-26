@@ -41,6 +41,8 @@ fiado --accessToken YOUR_ACCESS_TOKEN --fileId YOUR_FILE_ID --directory ./assets
 | `--directory`   | Directory to save the downloaded assets.                                  | `./dist` |
 | `--dryRun`      | Generates a `config.json` with a list of assets without downloading them. | `false`  |
 | `--fileType`    | File extension for the assets (`svg` or `png`).                           | `svg`    |
+| `--customLogo`  | String with custom logo (like ascii art)                                  | Fiado    |
+| `--hideLogo`    | Hide logo                                                                 | `false`  |
 
 ### Using It Programmatically
 
@@ -123,4 +125,5 @@ A `fileId` is the unique identifier for the Figma file you want to download asse
 ## License
 
 This project is licensed under the ISC License.
+
 # Force detection
