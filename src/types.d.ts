@@ -4,6 +4,8 @@ export interface UserInput {
   directory?: string;
   fileType?: "svg" | "png";
   dryRun?: boolean;
+  customLogo?: string;
+  hideLogo?: boolean;
 }
 
 export interface Config {
@@ -12,6 +14,8 @@ export interface Config {
   directory: string;
   fileType: string;
   dryRun: boolean;
+  customLogo: string;
+  hideLogo: boolean;
 }
 
 export interface Argv extends Partial<Config> {
