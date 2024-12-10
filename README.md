@@ -125,5 +125,3 @@ A `fileId` is the unique identifier for the Figma file you want to download asse
 ## License
 
 This project is licensed under the ISC License.
-
-# Force detection
