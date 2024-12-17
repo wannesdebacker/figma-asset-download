@@ -95,6 +95,8 @@ If any required option is missing from both arguments and the `.env` file, Fiado
 ## Notes
 
 - Ensure your Figma access token has the required permissions to access files.
+- The `--pattern` option allows you to filter which components to download based on their names using regular expressions (regex).
+  This is useful when you only want specific components, like icons, logos, or other naming patterns.
 
 ## What is an `accessToken` or `fileId`?
 
@@ -123,6 +125,18 @@ A `fileId` is the unique identifier for the Figma file you want to download asse
 2. When you share the file or check its URL in the address bar, it will look something like this:
 
 `https://www.figma.com/design/{fileId}/{something else but not the fileId}`
+
+## How to use the `--pattern` option.
+
+The --pattern option takes a regular expression (regex) to filter component names.
+
+| **Regex Example**        | **Matches Component Names**             | **Explanation**                                                 |
+| ------------------------ | --------------------------------------- | --------------------------------------------------------------- |
+| `^icon-`                 | `icon-user`, `icon-home`                | Matches names that start with `icon-`.                          |
+| `-logo$`                 | `brand-logo`, `company-logo`            | Matches names that end with `-logo`.                            |
+| `^button.*primary$`      | `button-primary`, `button-main-primary` | Matches names starting with `button` and ending with `primary`. |
+| `.*`                     | `everything`                            | Matches all component names (no filtering).                     |
+| `^ICON-` (with `i` flag) | `icon-user`, `ICON-admin`               | Case-insensitive match for names starting with `ICON-`.         |
 
 ## License
 
