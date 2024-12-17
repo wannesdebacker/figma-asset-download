@@ -50,11 +50,11 @@ fiado --accessToken YOUR_ACCESS_TOKEN --fileId YOUR_FILE_ID --directory ./assets
 Fiado can also be used in a Node.js script:
 
 ```js
-import init from "fiado";
+import fiado from "fiado";
 
 (async () => {
   try {
-    await init({
+    await fiado({
       accessToken: "your-figma-access-token",
       fileId: "your-figma-file-id",
       directory: "./dist",
