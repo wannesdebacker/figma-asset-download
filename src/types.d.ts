@@ -6,6 +6,7 @@ export interface UserInput {
   dryRun?: boolean;
   customLogo?: string;
   hideLogo?: boolean;
+  pattern?: string;
 }
 
 export interface Config {
@@ -16,6 +17,7 @@ export interface Config {
   dryRun: boolean;
   customLogo: string;
   hideLogo: boolean;
+  pattern: string;
 }
 
 export interface Argv extends Partial<Config> {

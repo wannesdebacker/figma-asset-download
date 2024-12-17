@@ -22,6 +22,7 @@ export const getUserConfig = async (args) => {
       fileId: argFileId,
       directory,
       fileType,
+      pattern,
     } = args;
 
     const envAccessToken = process.env.FIGMA_ASSET_TOKEN || null;
@@ -66,6 +67,7 @@ export const getUserConfig = async (args) => {
       fileId: argFileId || envFileId || answers.fileId,
       directory: directory || answers.directory,
       fileType,
+      pattern,
     };
   } catch (err) {
     if (err instanceof Error) {

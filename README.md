@@ -43,6 +43,7 @@ fiado --accessToken YOUR_ACCESS_TOKEN --fileId YOUR_FILE_ID --directory ./assets
 | `--fileType`    | File extension for the assets (`svg` or `png`).                           | `svg`    |
 | `--customLogo`  | String with custom logo (like ascii art)                                  | Fiado    |
 | `--hideLogo`    | Hide logo                                                                 | `false`  |
+| `--pattern`     | Regex pattern to filter component names (e.g., ^logo-).                   | `null`   |
 
 ### Using It Programmatically
 
@@ -89,6 +90,7 @@ If any required option is missing from both arguments and the `.env` file, Fiado
 - Programmatic API for advanced use cases.
 - Customizable save directory for downloaded assets.
 - Dry-run option to generate a preview of assets without downloading them.
+- Regex filtering with --pattern to match specific component names.
 
 ## Notes
 

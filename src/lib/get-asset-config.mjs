@@ -13,15 +13,23 @@ import ora from "ora";
 /**
  * @param {FigmaNode} node
  * @param {AssetConfig[]} components
+ * @param {string} pattern
  * @returns {AssetConfig[]}
  */
-export const findComponents = (node, components = []) => {
-  if (node.type === "COMPONENT" && node.name && node.id) {
+export const findComponents = (node, components = [], pattern) => {
+  if (
+    node.type === "COMPONENT" &&
+    node.name &&
+    node.id &&
+    (!pattern || new RegExp(pattern, "i").test(node.name))
+  ) {
     components.push({ name: node.name, id: node.id });
   }
 
   if (node.children) {
-    node.children.forEach((child) => findComponents(child, components));
+    node.children.forEach((child) =>
+      findComponents(child, components, pattern)
+    );
   }
 
   return components;
@@ -29,10 +37,11 @@ export const findComponents = (node, components = []) => {
 
 /**
  * @param {{ children: FigmaNode[] }} document
+ * @param {string} pattern
  * @returns {AssetConfig[]}
  * @throws {Error}
  */
-export const getPageObject = (document) => {
+export const getPageObject = (document, pattern) => {
   try {
     return document.children.reduce(
       /**
@@ -41,7 +50,7 @@ export const getPageObject = (document) => {
        * @returns {AssetConfig[]}
        */
       (allComponents, file) => {
-        return allComponents.concat(findComponents(file, []));
+        return allComponents.concat(findComponents(file, [], pattern));
       },
       []
     );
@@ -63,7 +72,7 @@ export const getAssetConfig = async (userConfig) => {
   const spinner = ora("Getting asset configuration").start();
 
   try {
-    const { accessToken, fileId, fileType } = userConfig;
+    const { accessToken, fileId, fileType, pattern } = userConfig;
 
     if (!accessToken || !fileId) {
       throw new Error("Please provide an access token and file ID");
@@ -75,7 +84,7 @@ export const getAssetConfig = async (userConfig) => {
       throw new Error("Document not found");
     }
 
-    const data = getPageObject(rawData.document);
+    const data = getPageObject(rawData.document, pattern);
 
     spinner.succeed("Successfully fetched asset configuration");
 
@@ -102,6 +111,11 @@ export const getAssetConfig = async (userConfig) => {
 export const enrichData = async (data, accessToken, fileId, fileType) => {
   try {
     const ids = data.map((item) => item.id).join(",");
+
+    if (!ids) {
+      console.warn("No matching components found. Skipping enrichment step.");
+      return [];
+    }
     const response = await figmaApi(
       accessToken,
       `images/${fileId}?ids=${ids}&format=${fileType}`

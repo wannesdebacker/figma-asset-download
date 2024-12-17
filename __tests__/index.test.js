@@ -63,6 +63,188 @@ describe("findComponents", () => {
     const result = findComponents(mockNode);
     expect(result).toEqual([]);
   });
+
+  it("should find components matching a pattern", () => {
+    const mockNode = {
+      type: "FRAME",
+      children: [
+        {
+          type: "COMPONENT",
+          name: "icon-button",
+          id: "123",
+        },
+        {
+          type: "COMPONENT",
+          name: "icon-clock",
+          id: "456",
+        },
+        {
+          type: "COMPONENT",
+          name: "button-primary",
+          id: "789",
+        },
+      ],
+    };
+
+    const result = findComponents(mockNode, [], "^icon-");
+    expect(result).toEqual([
+      { name: "icon-button", id: "123" },
+      { name: "icon-clock", id: "456" },
+    ]);
+  });
+
+  it("should return an empty array if no components match the pattern", () => {
+    const mockNode = {
+      type: "FRAME",
+      children: [
+        {
+          type: "COMPONENT",
+          name: "button-primary",
+          id: "123",
+        },
+        {
+          type: "COMPONENT",
+          name: "card-header",
+          id: "456",
+        },
+      ],
+    };
+
+    const result = findComponents(mockNode, [], "^icon-");
+    expect(result).toEqual([]);
+  });
+
+  it("should find components with a case-insensitive pattern", () => {
+    const mockNode = {
+      type: "FRAME",
+      children: [
+        {
+          type: "COMPONENT",
+          name: "Icon-Button",
+          id: "123",
+        },
+        {
+          type: "COMPONENT",
+          name: "ICON-Clock",
+          id: "456",
+        },
+        {
+          type: "COMPONENT",
+          name: "button-primary",
+          id: "789",
+        },
+      ],
+    };
+
+    const result = findComponents(mockNode, [], "^icon-", "i"); // Case-insensitive
+    expect(result).toEqual([
+      { name: "Icon-Button", id: "123" },
+      { name: "ICON-Clock", id: "456" },
+    ]);
+  });
+
+  it("should include all components if pattern is null", () => {
+    const mockNode = {
+      type: "FRAME",
+      children: [
+        {
+          type: "COMPONENT",
+          name: "icon-button",
+          id: "123",
+        },
+        {
+          type: "COMPONENT",
+          name: "button-primary",
+          id: "456",
+        },
+      ],
+    };
+
+    const result = findComponents(mockNode, [], null);
+    expect(result).toEqual([
+      { name: "icon-button", id: "123" },
+      { name: "button-primary", id: "456" },
+    ]);
+  });
+
+  it("should handle a pattern that matches no components gracefully", () => {
+    const mockNode = {
+      type: "FRAME",
+      children: [
+        {
+          type: "COMPONENT",
+          name: "card-header",
+          id: "123",
+        },
+        {
+          type: "COMPONENT",
+          name: "footer-link",
+          id: "456",
+        },
+      ],
+    };
+
+    const result = findComponents(mockNode, [], "nonexistent-pattern");
+    expect(result).toEqual([]);
+  });
+
+  it("should handle special characters in regex patterns", () => {
+    const mockNode = {
+      type: "FRAME",
+      children: [
+        { type: "COMPONENT", name: "my.component", id: "123" },
+        { type: "COMPONENT", name: "my-component", id: "456" },
+        { type: "COMPONENT", name: "my_component", id: "789" },
+      ],
+    };
+
+    const result = findComponents(mockNode, [], "my\\.component");
+    expect(result).toEqual([{ name: "my.component", id: "123" }]);
+  });
+
+  it("should match components with digits in their names", () => {
+    const mockNode = {
+      type: "FRAME",
+      children: [
+        { type: "COMPONENT", name: "icon-123", id: "123" },
+        { type: "COMPONENT", name: "icon-456", id: "456" },
+        { type: "COMPONENT", name: "button-789", id: "789" },
+      ],
+    };
+
+    const result = findComponents(mockNode, [], "icon-\\d+");
+    expect(result).toEqual([
+      { name: "icon-123", id: "123" },
+      { name: "icon-456", id: "456" },
+    ]);
+  });
+
+  it("should handle deeply nested components with patterns", () => {
+    const mockNode = {
+      type: "FRAME",
+      children: [
+        {
+          type: "FRAME",
+          children: [
+            { type: "COMPONENT", name: "icon-clock", id: "123" },
+            {
+              type: "FRAME",
+              children: [
+                { type: "COMPONENT", name: "icon-settings", id: "456" },
+                { type: "COMPONENT", name: "button-save", id: "789" },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    const result = findComponents(mockNode, [], "^icon-");
+    expect(result).toEqual([
+      { name: "icon-clock", id: "123" },
+      { name: "icon-settings", id: "456" },
+    ]);
+  });
 });
 
 describe("getPageObject", () => {

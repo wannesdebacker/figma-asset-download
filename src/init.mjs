@@ -59,6 +59,11 @@ const argv = yargs(hideBin(process.argv))
     default: false,
     description: "Hide the logo",
   })
+  .option("pattern", {
+    alias: "p",
+    type: "string",
+    description: "Pattern to filter components (optional, e.g., ^icon-)",
+  })
   .alias("h", "help")
   .help()
   .parseSync();
