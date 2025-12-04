@@ -91,6 +91,47 @@ If any required option is missing from both arguments and the `.env` file, Fiado
 - Customizable save directory for downloaded assets.
 - Dry-run option to generate a preview of assets without downloading them.
 - Regex filtering with --pattern to match specific component names.
+- **Automatic rate limit handling with retry logic** - respects Figma's API rate limits.
+
+## Rate Limit Handling
+
+As of November 17, 2025, Figma has updated their API rate limits. Fiado automatically handles rate limiting to ensure reliable operation:
+
+### How It Works
+
+- **Automatic Retry**: When a rate limit (429 error) is encountered, Fiado automatically waits and retries the request
+- **Respects Retry-After Header**: Uses the `Retry-After` header from Figma's response to determine the exact wait time
+- **Serial Processing**: All API requests and asset downloads happen sequentially (one at a time) to minimize rate limit hits
+- **Progress Tracking**: Shows clear progress messages during downloads and when retrying rate-limited requests
+- **Smart Error Messages**: If rate limits persist, provides helpful information about your plan tier and upgrade options
+
+### What You'll See
+
+When rate limited, you'll see messages like:
+```
+Rate limited. Retrying after 30 seconds (attempt 1/10)...
+```
+
+During downloads, you'll see progress:
+```
+Downloading assets from Figma (15/50): icon-user
+```
+
+### Rate Limit Details
+
+Figma's rate limits vary by:
+- **Plan tier**: Starter, Professional, Organization, Enterprise
+- **Seat type**: View/Collab seats vs Dev/Full seats
+- **API tier**: Different endpoints have different limits (Tier 1, 2, 3)
+
+For more information about Figma's rate limits, see the [official Figma rate limit documentation](https://www.figma.com/developers/api#rate-limits).
+
+### Troubleshooting Rate Limits
+
+If you frequently hit rate limits:
+1. Fiado will automatically retry up to 10 times with appropriate wait periods
+2. Consider upgrading your Figma plan or seat type for higher rate limits
+3. If using a personal access token, consider using OAuth apps which have separate rate limit budgets per app
 
 ## Notes
 
