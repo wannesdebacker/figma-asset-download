@@ -19,20 +19,6 @@ const sanitizeFileName = (name) => {
 };
 
 /**
- * @param {(() => Promise<any>)[]} tasks
- * @param {number} [batchSize]
- * @returns {Promise<any[]>}
- */
-async function batchPromiseAll(tasks, batchSize = 8) {
-  const results = [];
-  for (let i = 0; i < tasks.length; i += batchSize) {
-    const batch = tasks.slice(i, i + batchSize).map((task) => task());
-    results.push(...(await Promise.all(batch)));
-  }
-  return results;
-}
-
-/**
  * @typedef {import('../types').AssetConfig} AssetConfig
  * @param {AssetConfig[]} config
  * @param {string} directory
@@ -48,12 +34,17 @@ export const downloadAssets = async (config, directory, fileType) => {
 
     await fs.mkdir(directoryPath, { recursive: true });
 
-    const downloadTasks = config.map(({ name, downloadLink }) => async () => {
+    // Process downloads serially to respect rate limits
+    for (let i = 0; i < config.length; i++) {
+      const { name, downloadLink } = config[i];
+
       if (!downloadLink) {
         throw new Error(`Download link is missing for ${name}`);
       }
 
       const sanitizedFileName = sanitizeFileName(name);
+
+      spinner.text = `Downloading assets from Figma (${i + 1}/${config.length}): ${name}`;
 
       const response = await fetch(downloadLink);
       const buffer = Buffer.from(await response.arrayBuffer());
@@ -64,9 +55,7 @@ export const downloadAssets = async (config, directory, fileType) => {
       );
 
       await fs.writeFile(filePath, buffer);
-    });
-
-    await batchPromiseAll(downloadTasks);
+    }
 
     spinner.succeed(`Assets successfully downloaded to ${directory}`);
   } catch (err) {
