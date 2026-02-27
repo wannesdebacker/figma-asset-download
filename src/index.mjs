@@ -3,8 +3,10 @@
 
 import init from "./init.mjs";
 
-await init();
+// Execute init() only when run directly as a script
+if (import.meta.url === `file://${process.argv[1]}`) {
+  await init();
+}
 
 export default init;
-
 export { init };
