@@ -72,10 +72,13 @@ export const getUserConfig = async (args) => {
   } catch (err) {
     if (err instanceof Error) {
       throw new Error(
-        `Something went wrong while creating user config: ${err.message}`
+        `Something went wrong while creating user config: ${err.message}`,
+        { cause: err }
       );
     } else {
-      throw new Error("Something went wrong while creating user config");
+      throw new Error("Something went wrong while creating user config", {
+        cause: err,
+      });
     }
   }
 };

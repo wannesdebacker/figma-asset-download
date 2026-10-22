@@ -62,15 +62,19 @@ export const downloadAssets = async (config, directory, fileType) => {
     spinner.fail(
       `Something went wrong during asset download: ${
         err instanceof Error ? err.message : "Unknown error"
-      }`
+      }`,
+      { cause: err }
     );
 
     if (err instanceof Error) {
       throw new Error(
-        `Something went wrong while downloading assets: ${err.message}`
+        `Something went wrong while downloading assets: ${err.message}`,
+        { cause: err }
       );
     } else {
-      throw new Error("Something went wrong while downloading assets");
+      throw new Error("Something went wrong while downloading assets", {
+        cause: err,
+      });
     }
   }
 };

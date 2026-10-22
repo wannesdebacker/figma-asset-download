@@ -33,18 +33,23 @@
   "license": "ISC",
   "packageManager": "pnpm@10.34.4+sha512.8768be55200ae3f2226b6527fcca2687e14bc4e5f12d7721a0f25da3df47915177058648db4177baf348120fa0ba2752d8d8d93f6beaf1fe64ae18da8de961af",
   "dependencies": {
-    "chalk": "^6.0.0",
-    "dotenv": "^17.0.0",
+    "chalk": "^6.0.1",
+    "dotenv": "^18.0.8",
     "enquirer": "^2.4.1",
-    "ora": "^9.0.0",
-    "yargs": "^18.0.0"
+    "ora": "^9.4.1",
+    "yargs": "^18.2.0"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.0",
-    "@types/node": "^24.0.0",
-    "@types/yargs": "^17.0.33",
-    "eslint": "^10.0.0",
-    "globals": "^17.0.0",
-    "vitest": "^4.0.0"
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.19.2",
+    "@types/yargs": "^17.0.35",
+    "eslint": "^10.13.0",
+    "globals": "^17.13.0",
+    "vitest": "^5.0.5"
+  },
+  "pnpm": {
+    "overrides": {
+      "vite": "7.3.7"
+    }
   }
 }

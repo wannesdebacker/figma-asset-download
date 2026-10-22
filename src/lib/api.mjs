@@ -78,11 +78,14 @@ export const figmaApi = async (accessToken, endpoint, maxRetries = 10) => {
 
       if (err instanceof Error) {
         throw new Error(
-          `Something went wrong while fetching data from Figma: ${err.message}`
+          `Something went wrong while fetching data from Figma: ${err.message}`,
+          { cause: err }
         );
       }
 
-      throw new Error("Something went wrong while fetching data from Figma");
+      throw new Error("Something went wrong while fetching data from Figma", {
+        cause: err,
+      });
     }
   }
 };
