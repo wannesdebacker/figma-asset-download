@@ -58,7 +58,8 @@ export const getPageObject = (document, pattern) => {
     throw new Error(
       `Something went wrong while creating asset config: ${
         err instanceof Error ? err.message : "Unknown error"
-      }`
+      }`,
+      { cause: err }
     );
   }
 };
@@ -95,7 +96,8 @@ export const getAssetConfig = async (userConfig) => {
     throw new Error(
       `Something went wrong while fetching asset config: ${
         err instanceof Error ? err.message : "Unknown error"
-      }`
+      }`,
+      { cause: err }
     );
   }
 };
@@ -129,7 +131,8 @@ export const enrichData = async (data, accessToken, fileId, fileType) => {
     throw new Error(
       `Something went wrong while enriching data: ${
         err instanceof Error ? err.message : "Unknown error"
-      }`
+      }`,
+      { cause: err }
     );
   }
 };

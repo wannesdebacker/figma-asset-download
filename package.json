@@ -1,6 +1,6 @@
 {
   "name": "fiado",
-  "version": "2.6.2",
+  "version": "2.6.4",
   "description": "Automatically downloads all assets from a Figma file",
   "type": "module",
   "homepage": "https://github.com/wannesdebacker/figma-asset-download",
@@ -33,18 +33,23 @@
   "license": "ISC",
   "packageManager": "pnpm@12.15.0+sha512.b3951d6d6ff4a9f13dc7cf56cd28d2b8eb37dbcc9c68e52e1e1191873ea9f82a017287ab50baadc5ccc494f036c67c0e47eb13608c2fa36f47711b61ea128e61",
   "dependencies": {
-    "chalk": "^6.0.0",
-    "dotenv": "^17.0.0",
+    "chalk": "^6.0.1",
+    "dotenv": "^18.0.8",
     "enquirer": "^2.4.1",
-    "ora": "^9.0.0",
-    "yargs": "^18.0.0"
+    "ora": "^9.4.1",
+    "yargs": "^18.2.0"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.0",
-    "@types/node": "^24.0.0",
-    "@types/yargs": "^17.0.33",
-    "eslint": "^10.0.0",
-    "globals": "^17.0.0",
-    "vitest": "^4.0.0"
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.19.2",
+    "@types/yargs": "^17.0.35",
+    "eslint": "^10.13.0",
+    "globals": "^17.13.0",
+    "vitest": "^5.0.5"
+  },
+  "pnpm": {
+    "overrides": {
+      "vite": "7.3.7"
+    }
   }
 }
